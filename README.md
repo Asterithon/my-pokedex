@@ -1,50 +1,79 @@
-# Welcome to your Expo app 👋
+# Pokédex Mobile App ⚡📱
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+Aplikasi Pokédex interaktif berkinerja tinggi berbasis **React Native**, **Expo SDK 54**, dan **Expo Router v6** yang terhubung langsung ke [PokéAPI](https://pokeapi.co/).
 
-## Get started
+---
 
-1. Install dependencies
+## 🌟 Fitur Utama (Phase 1, 2, & 3 Completed)
 
+1. **Performant Infinite Scroll & Pagination (Phase 1)**
+   - Menggunakan `<FlatList>` React Native dengan pemanggilan data bertahap (*paginated API requests* offset/limit).
+   - *Automatic Image Caching* menggunakan `expo-image` untuk mempercepat pemuatan sprite tanpa *lag*.
+   - Fitur *Pull-to-Refresh* untuk memperbarui daftar data.
+
+2. **Pencarian & Filter Tipe Elemen (Phase 2)**
+   - **Search Bar Interaktif**: Pencarian real-time berdasarkan nama Pokémon atau nomor ID.
+   - **Filter Chip Horizontal**: Filter daftar Pokémon berdasarkan 18 tipe elemen (Fire, Water, Grass, Electric, Psychic, Dragon, dll).
+
+3. **Halaman Detail Pokémon Komprehensif (Phase 1 & 2)**
+   - **Header Hero Dinamis**: Latar belakang kartu dan header otomatis menyesuaikan warna tipe elemen utama.
+   - **Artworks & Sprites**: Tampilan gambar *Official Artwork* resolusi tinggi beserta sprite tampak depan dan belakang.
+   - **Informasi Species & Deskripsi**: Genus/kategori Pokémon, tinggi (meter), berat (kg), dan deskripsi Pokédex resmi.
+   - **Visualisasi Base Stats Beranimasi**: Grafik *Progress Bar* untuk HP, Attack, Defense, Sp. Atk, Sp. Def, dan Speed beserta kalkulasi total stats.
+
+4. **Arsitektur Kode Modular (Phase 3)**
+   - Terstruktur rapi di folder `src/` (`components/`, `services/`, `constants/`, `types/`).
+
+---
+
+## 🛠️ Teknologi yang Digunakan
+
+- **Framework**: React Native 0.81 & Expo 54
+- **Router**: Expo Router v6 (File-based Routing)
+- **Language**: TypeScript 5.9
+- **Image Caching**: `expo-image`
+- **Animations**: `react-native-reanimated` & `react-native` Layout Animations
+- **Data Source**: PokéAPI REST API (`https://pokeapi.co/api/v2/`)
+
+---
+
+## 📁 Struktur Proyek (Modular Architecture)
+
+```text
+pokedex/
+├── app/                  # Expo Router Pages
+│   ├── _layout.tsx       # Stack Navigator Configuration
+│   ├── index.tsx         # Main Pokédex List Screen (FlatList + Search + Filter)
+│   └── details.tsx       # Detailed Pokémon View (Stats + Species + Artworks)
+├── src/
+│   ├── components/       # Reusable UI Components
+│   │   ├── PokemonCard.tsx
+│   │   ├── TypeBadge.tsx
+│   │   ├── StatBar.tsx
+│   │   └── SearchBar.tsx
+│   ├── constants/        # App Constants & Theme Colors
+│   │   └── colors.ts
+│   ├── services/         # PokéAPI Service Client
+│   │   └── pokeApi.ts
+│   └── types/            # TypeScript Definitions
+│       └── pokemon.ts
+```
+
+---
+
+## 🚀 Panduan Menjalankan Aplikasi
+
+1. **Install Dependensi**
    ```bash
    npm install
    ```
 
-2. Start the app
-
+2. **Jalankan Development Server**
    ```bash
    npx expo start
    ```
 
-In the output, you'll find options to open the app in a
-
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
-
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
-
-## Get a fresh project
-
-When you're ready, run:
-
-```bash
-npm run reset-project
-```
-
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
-
-## Learn more
-
-To learn more about developing your project with Expo, look at the following resources:
-
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
-
-## Join the community
-
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+3. **Pilih Platform**
+   - Tekan `a` untuk Android Emulator / perangkat Android via Expo Go.
+   - Tekan `i` untuk iOS Simulator.
+   - Tekan `w` untuk menjalankan di Web Browser.
