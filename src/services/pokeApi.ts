@@ -29,6 +29,30 @@ export async function fetchPokemonList(
   }
 }
 
+export async function fetchPokemonsByType(
+  type: string
+): Promise<PokemonBasicDetails[]> {
+  try {
+    const response = await fetch(`${BASE_URL}/type/${type.toLowerCase()}`);
+    if (!response.ok) return [];
+    const data = await response.json();
+
+    // Take top 60 pokemons for this type to keep loading snappy
+    const pokemonsOfType = data.pokemon.slice(0, 60);
+
+    const detailedPokemons = await Promise.all(
+      pokemonsOfType.map(async (item: { pokemon: { name: string } }) => {
+        return await fetchPokemonBasicDetails(item.pokemon.name);
+      })
+    );
+
+    return detailedPokemons.filter((p): p is PokemonBasicDetails => p !== null);
+  } catch (error) {
+    console.error(`Error fetching pokemons for type ${type}:`, error);
+    return [];
+  }
+}
+
 export async function fetchPokemonBasicDetails(
   nameOrId: string | number
 ): Promise<PokemonBasicDetails | null> {

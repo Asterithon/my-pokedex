@@ -9,7 +9,11 @@ import {
 } from "react-native";
 import { PokemonCard } from "../src/components/PokemonCard";
 import { SearchBar } from "../src/components/SearchBar";
-import { fetchPokemonBasicDetails, fetchPokemonList } from "../src/services/pokeApi";
+import {
+  fetchPokemonBasicDetails,
+  fetchPokemonList,
+  fetchPokemonsByType,
+} from "../src/services/pokeApi";
 import { PokemonBasicDetails } from "../src/types/pokemon";
 
 const PAGE_SIZE = 20;
@@ -47,15 +51,38 @@ export default function Index() {
     [offset, loading, hasMore]
   );
 
+  // Load initial pokemons
   useEffect(() => {
     loadPokemons(true);
   }, []);
 
+  // Handle Type Filter Selection via PokéAPI
+  useEffect(() => {
+    if (selectedType !== null) {
+      setLoading(true);
+      fetchPokemonsByType(selectedType).then((typePokemons) => {
+        setPokemons(typePokemons);
+        setLoading(false);
+      });
+    } else {
+      setOffset(0);
+      setHasMore(true);
+      loadPokemons(true);
+    }
+  }, [selectedType]);
+
   const handleRefresh = () => {
     setRefreshing(true);
-    setHasMore(true);
-    setOffset(0);
-    loadPokemons(true);
+    if (selectedType !== null) {
+      fetchPokemonsByType(selectedType).then((typePokemons) => {
+        setPokemons(typePokemons);
+        setRefreshing(false);
+      });
+    } else {
+      setHasMore(true);
+      setOffset(0);
+      loadPokemons(true);
+    }
   };
 
   const handleLoadMore = () => {
@@ -64,9 +91,9 @@ export default function Index() {
     }
   };
 
-  // Direct lookup if user searches for an ID or specific name not yet loaded
+  // Direct API lookup if search query is entered and not in memory
   useEffect(() => {
-    if (searchQuery.trim().length > 2) {
+    if (searchQuery.trim().length > 1) {
       const q = searchQuery.trim().toLowerCase();
       const exists = pokemons.some(
         (p) => p.name.toLowerCase().includes(q) || String(p.id) === q
@@ -85,25 +112,20 @@ export default function Index() {
     }
   }, [searchQuery]);
 
-  // Filter pokemons based on search query and selected type
+  // Filter pokemons based on search query
   const filteredPokemons = pokemons.filter((pokemon) => {
-    const matchesSearch =
-      searchQuery === "" ||
-      pokemon.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      String(pokemon.id).includes(searchQuery.trim());
-
-    const matchesType =
-      selectedType === null ||
-      pokemon.types.some(
-        (t) => t.toLowerCase() === selectedType.toLowerCase()
-      );
-
-    return matchesSearch && matchesType;
+    if (searchQuery.trim() === "") return true;
+    const q = searchQuery.trim().toLowerCase();
+    return (
+      pokemon.name.toLowerCase().includes(q) || String(pokemon.id).includes(q)
+    );
   });
 
   return (
     <SafeAreaView style={styles.container}>
       <FlatList
+        key="grid-2-columns"
+        numColumns={2}
         data={filteredPokemons}
         keyExtractor={(item) => `${item.id}-${item.name}`}
         renderItem={({ item }) => <PokemonCard pokemon={item} />}
@@ -145,7 +167,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#F8FAFC",
   },
   listContent: {
-    padding: 16,
+    padding: 10,
   },
   emptyContainer: {
     alignItems: "center",
