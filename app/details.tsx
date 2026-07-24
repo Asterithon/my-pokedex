@@ -10,7 +10,7 @@ import {
 } from "react-native";
 import { StatBar } from "../src/components/StatBar";
 import { TypeBadge } from "../src/components/TypeBadge";
-import { getPokemonTypeColor } from "../src/constants/colors";
+import { getPokemonTypeColor, hexToRgba } from "../src/constants/colors";
 import {
   fetchPokemonFullDetails,
   fetchPokemonSpeciesInfo,
@@ -58,7 +58,10 @@ export default function Details() {
   }
 
   const primaryType = pokemon.types[0] || "normal";
-  const headerBg = getPokemonTypeColor(primaryType);
+  const primaryColorHex = getPokemonTypeColor(primaryType);
+  // 40% opacity hero card background color
+  const headerBg40Percent = hexToRgba(primaryColorHex, 0.4);
+
   const formattedId = `#${String(pokemon.id).padStart(3, "0")}`;
   const capitalizedName =
     pokemon.name.charAt(0).toUpperCase() + pokemon.name.slice(1);
@@ -70,8 +73,8 @@ export default function Details() {
 
   return (
     <ScrollView style={styles.container} contentContainerStyle={styles.scrollContent}>
-      {/* Hero Header Card */}
-      <View style={[styles.heroCard, { backgroundColor: headerBg }]}>
+      {/* Hero Header Card with 40% opacity */}
+      <View style={[styles.heroCard, { backgroundColor: headerBg40Percent }]}>
         <View style={styles.heroHeader}>
           <Text style={styles.pokemonName}>{capitalizedName}</Text>
           <Text style={styles.pokemonId}>{formattedId}</Text>
@@ -99,7 +102,7 @@ export default function Details() {
       {species && (
         <View style={styles.sectionCard}>
           <Text style={styles.sectionTitle}>Deskripsi Pokédex</Text>
-          <Text style={styles.flavorText}>“{species.flavorText}”</Text>
+          <Text style={styles.flavorText}>{`"${species.flavorText}"`}</Text>
         </View>
       )}
 
@@ -183,11 +186,8 @@ const styles = StyleSheet.create({
   heroCard: {
     borderRadius: 24,
     padding: 20,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.2,
-    shadowRadius: 8,
-    elevation: 5,
+    elevation: 0,
+    shadowOpacity: 0,
   },
   heroHeader: {
     flexDirection: "row",
@@ -197,19 +197,16 @@ const styles = StyleSheet.create({
   pokemonName: {
     fontSize: 28,
     fontWeight: "800",
-    color: "#FFFFFF",
-    textShadowColor: "rgba(0, 0, 0, 0.2)",
-    textShadowOffset: { width: 0, height: 1 },
-    textShadowRadius: 3,
+    color: "#0F172A",
   },
   pokemonId: {
     fontSize: 18,
     fontWeight: "bold",
-    color: "rgba(255, 255, 255, 0.75)",
+    color: "#475569",
   },
   genusText: {
     fontSize: 14,
-    color: "rgba(255, 255, 255, 0.9)",
+    color: "#334155",
     fontWeight: "600",
     marginTop: 2,
     marginBottom: 8,

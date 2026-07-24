@@ -130,6 +130,7 @@ export default function Index() {
         keyExtractor={(item) => `${item.id}-${item.name}`}
         renderItem={({ item }) => <PokemonCard pokemon={item} />}
         contentContainerStyle={styles.listContent}
+        columnWrapperStyle={styles.columnWrapper}
         onEndReached={handleLoadMore}
         onEndReachedThreshold={0.5}
         refreshing={refreshing}
@@ -167,7 +168,13 @@ const styles = StyleSheet.create({
     backgroundColor: "#F8FAFC",
   },
   listContent: {
-    padding: 10,
+    paddingHorizontal: 20,
+    paddingTop: 12,
+    paddingBottom: 24,
+  },
+  columnWrapper: {
+    gap: 12,
+    marginBottom: 12,
   },
   emptyContainer: {
     alignItems: "center",

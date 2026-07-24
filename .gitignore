@@ -21,10 +21,11 @@ expo-env.d.ts
 # Metro
 .metro-health-check*
 
-# debug
+# debug & logs
 npm-debug.*
 yarn-debug.*
 yarn-error.*
+*.log
 
 # macOS
 .DS_Store
@@ -45,3 +46,9 @@ app-example
 # local documentation notes
 note.md
 
+# IDE & Editor configurations
+.vscode/
+.claude/
+.idea/
+*.swp
+*.swo
